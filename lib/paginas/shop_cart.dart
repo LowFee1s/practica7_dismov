@@ -5,8 +5,7 @@ import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
-
-  void removeItemFromCart(BuildContext context, Product product){
+  void removeItemFromCart(BuildContext context, Product product) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -29,7 +28,7 @@ class CartPage extends StatelessWidget {
     );
   }
 
-  void ticket(BuildContext context){
+  void ticket(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -45,7 +44,6 @@ class CartPage extends StatelessWidget {
 
               context.read<Shop>().setcountcarrito(1);
               Navigator.of(context).pushNamed("/ticket_page");
-
             },
             child: Text("Si"),
           ),
@@ -53,6 +51,7 @@ class CartPage extends StatelessWidget {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<Shop>().cart;
@@ -60,64 +59,90 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-          elevation: 0,
-          foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text("Carrito de Compras"),
+        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text("Carrito de Compras"),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         children: [
           Expanded(
-                child: cart.length > 0 ? ListView.builder(
-                  itemCount: cart.length,
-                  itemBuilder: (context, index) {
-                  final item = cart[index];
-
-                  return ListTile(
-                    leading: Container(child: CircleAvatar(backgroundImage: NetworkImage(item.image))),
-                    title: Text(item.name),
-                    subtitle: Text("\$${item.price.toStringAsFixed(2)} MXN"),
-                      trailing: IconButton(
-                      icon: const Icon(Icons.remove),
-                      onPressed: () => removeItemFromCart(context, item),
-                    ),
-                  );
-
-                },) : Align(
-                  alignment: Alignment.center,
-                  child: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            Icon(Icons.warning_outlined, size: 100),
-                            Text("No tienes articulos en el carrito.", style: TextStyle(fontSize: 25),),
-                          ],)),
-                )),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text("Total: \$", style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05)),
-                    Text("${totalcarrito.toStringAsFixed(2)} MXN", style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05)),
-                  ],
+              child: cart.length > 0
+                  ? ListView.builder(
+                      itemCount: cart.length,
+                      itemBuilder: (context, index) {
+                        final item = cart[index];
+                        return ListTile(
+                          leading: Container(
+                              child: CircleAvatar(
+                                  backgroundImage: NetworkImage(item.image))),
+                          title: Text(item.name),
+                          subtitle:
+                              Text("\$${item.price.toStringAsFixed(2)} MXN"),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.remove),
+                            onPressed: () => removeItemFromCart(context, item),
+                          ),
+                        );
+                      },
+                    )
+                  : Align(
+                      alignment: Alignment.center,
+                      child: Center(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.warning_outlined, size: 100),
+                          Text(
+                            "No tienes articulos en el carrito.",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                        ],
+                      )),
+                    )),
+          Padding(
+            padding: EdgeInsets.only(right: 16.0, top: 16.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Text(
+                'Total: \$${totalcarrito.toStringAsFixed(2)} MXN',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                  fontWeight: FontWeight.bold,
                 ),
-                Row(
-                  children: [
-                    ElevatedButton(
-                        onPressed: totalcarrito > 0.00 ? () {
-                          context.read<Shop>().removeproducttotalcarrito(totalcarrito);
-                          context.read<Shop>().removeproductFromCart(cart[0]);
-                        } : null,
-                        child: Text("Vaciar carrito", style: TextStyle(color: Colors.black))
-                    ),
-                    ElevatedButton(
-                      onPressed: totalcarrito > 0.00 ? () {
-                        ticket(context);
-                      } : null,
-                      child: Text("Comprar carrito", style: TextStyle(color: Colors.black)),
-                    ),
-                  ],
+              ),
+            ),
+          ),
+          SizedBox(height: 50), // Espacio entre el total y los botones
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                ElevatedButton(
+                    onPressed: totalcarrito > 0.00
+                        ? () {
+                            context
+                                .read<Shop>()
+                                .removeproducttotalcarrito(totalcarrito);
+                            context.read<Shop>().removeproductFromCart(cart[0]);
+                          }
+                        : null,
+                    child: Text("Vaciar carrito",
+                        style: TextStyle(color: Colors.black))),
+                ElevatedButton(
+                  onPressed: totalcarrito > 0.00
+                      ? () {
+                          ticket(context);
+                        }
+                      : null,
+                  child: Text("Comprar carrito",
+                      style: TextStyle(color: Colors.black)),
                 ),
               ],
+            ),
           ),
+          SizedBox(height: 80), // Espacio en la parte inferior de la pantalla
         ],
       ),
     );

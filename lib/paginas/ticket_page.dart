@@ -291,7 +291,7 @@ class _TicketData extends State<TicketData> {
                 );
 
               },
-              child: isloading ? Center(child: CircularProgressIndicator()) : Text("Confirmar compra", style: TextStyle(fontSize: 17, color: Colors.white))),
+              child: isloading ? Center(child: CircularProgressIndicator()) : Text("Confirmar", style: TextStyle(fontSize: 17, color: Colors.white))),
           ],
         ),
 
